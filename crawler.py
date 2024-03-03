@@ -95,6 +95,7 @@ def __main__(conf, size_limit):
                             with open (os.path.join(conf,link.text,link.text+'_'+version), 'w') as file:
                                 for line in lines:
                                     file.write(line+'\n')
+                            print('\n' + 'new version found for ' + link.text + ': ' + version)
 size_limit = 2
 conf = '710SP1'
 __main__(conf, size_limit)
