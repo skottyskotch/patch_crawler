@@ -4,6 +4,8 @@ import getpass
 from bs4 import BeautifulSoup
 import os
 import re
+import sys
+import argparse
 
 def fetchTargetPageWithSamlNego(target_url):
     username = input('Username: ')
@@ -37,6 +39,8 @@ def fetchTargetPageWithSamlNego(target_url):
     # Ressource
     soup = BeautifulSoup(response_otp.text, 'html.parser')
     form = soup.find('form', {'name': 'saml-post-binding'})
+    if form == None:
+        return False, False
     action = form.get('action')
     saml_value = form.find('input', {'name': 'SAMLResponse'}).get('value')
     data = {
@@ -64,10 +68,21 @@ def processExclusion(filename):
     else:
         return False
 
-def __main__(conf, size_limit):
+def main(argv=sys.argv[1:]):
+    size_limit = 2
+    sys.argv = sys.argv[1:]
+    parser = argparse.ArgumentParser(
+        prog = 'Patch gatherer',
+        description = 'Fetch the current patches from intranet, keeping history of versions')
+    parser.add_argument('conf', nargs='?', default='710SP1', help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
+    args = parser.parse_args(argv)
+    conf = args.conf
     target_url = 'https://kiwi.planisware.com/Intranet/versions/' + conf + '/patches/_en_dev/'
     print('Download from ' + target_url)
     response, session = fetchTargetPageWithSamlNego(target_url)
+    if response == False:
+        print('Login failed. exit')
+        return False
     if not os.path.isdir(conf):
         os.mkdir(conf)
     if response.status_code != 200:
@@ -96,23 +111,8 @@ def __main__(conf, size_limit):
                                 for line in lines:
                                     file.write(line+'\n')
                             print('\n' + 'new version found for ' + link.text + ': ' + version)
-size_limit = 2
-conf = '710SP1'
-__main__(conf, size_limit)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+default_conf = '710SP1'
+if __name__ == '__main__':
+    main()
 
