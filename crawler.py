@@ -52,7 +52,7 @@ def fetchTargetPageWithSamlNego(target_url):
 
     return response_target, session
 
-def processExclusion(filename):
+def processExclusion(filename, conf, size_limit):
     if os.path.isfile(os.path.join(conf,'exclusions.txt')):
         with open(os.path.join(conf,'exclusions.txt')) as file:
             for line in file:
@@ -99,7 +99,7 @@ def main(argv=sys.argv[1:]):
             if os.path.isdir(os.path.join(conf,link.text)):
                 url = target_url + link['href']
                 size = int(session.head(url).headers['Content-Length'])
-                if size < size_limit * 1024 * 1024 or not processExclusion(link.text):
+                if size < size_limit * 1024 * 1024 or not processExclusion(link.text, conf, size_limit):
                     text = session.get(url).text
                     lines = text.splitlines()
                     firstline = lines[0]
