@@ -117,6 +117,7 @@ def main(argv=sys.argv[1:]):
 		for file in files:
 			if '.obin' in file:
 				patchlist.append(file)
+	patchlist.sort()
 	with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
 		fout.write('\n'.join(patchlist))
 
