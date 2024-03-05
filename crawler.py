@@ -63,7 +63,7 @@ def processExclusion(filename, conf, size_limit):
         sExclude = input("Invalid answer. Please enter 'yes', 'y', 'no' or 'n'")
     if sExclude.lower() in ['yes', 'y', 'oui', 'o']:
         with open(os.path.join(conf,'exclusions.txt'), 'a') as file:
-            file.write(filename)
+            file.write(filename+'\n')
         return True
     else:
         return False
