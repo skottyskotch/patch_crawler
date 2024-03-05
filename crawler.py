@@ -115,10 +115,9 @@ def main(argv=sys.argv[1:]):
 	for path, directories, files in os.walk(conf):
 		with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
 			for file in files:
-				fout.writeln(file)
+				fout.write(file+'\n')
 				print(file)
-		  
+
 default_conf = '710SP1'
 if __name__ == '__main__':
     main()
-
