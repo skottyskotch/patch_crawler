@@ -70,49 +70,54 @@ def processExclusion(filename, conf, size_limit):
 		return False
 
 def main(argv=sys.argv[1:]):
-    size_limit = 2
-    sys.argv = sys.argv[1:]
-    parser = argparse.ArgumentParser(
-        prog = 'Patch gatherer',
-        description = 'Fetch the current patches from intranet, keeping history of versions')
-    parser.add_argument('conf', nargs='?', default='710SP1', help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
-    args = parser.parse_args(argv)
-    conf = args.conf
-    target_url = 'https://kiwi.planisware.com/Intranet/versions/' + conf + '/patches/_en_dev/'
-    print('Download from ' + target_url)
-    response, session = fetchTargetPageWithSamlNego(target_url)
-    if response == False:
-        print('Login failed. exit')
-        return False
-    if not os.path.isdir(conf):
-        os.mkdir(conf)
-    if response.status_code != 200:
-        print('Unable to open ' + target_url + 'Status: ' + response.status_code)
-    else:
-        soup = BeautifulSoup(response.text, 'html.parser')
-        links = [link for link in soup.find_all('a', href=True) if link['href'].endswith('.obin')]
-        i=0
-        for link in links:
-            i+=1
-            print(str(i)+'/'+str(len(links)) + '    ',end = '\r')
-            if not os.path.isdir(os.path.join(conf,link.text)):
-                os.makedirs(os.path.join(conf,link.text))
-            if os.path.isdir(os.path.join(conf,link.text)):
-                url = target_url + link['href']
-                size = int(session.head(url).headers['Content-Length'])
-                if size < size_limit * 1024 * 1024 or not processExclusion(link.text, conf, size_limit):
-                    text = session.get(url).text
-                    lines = text.splitlines()
-                    firstline = lines[0]
-                    match = re.search(r'v (\d+\.\d+)',firstline)
-                    if match:
-                        version = match.group(1)
-                        if not os.path.isfile(os.path.join(conf,link.text,link.text+'_'+version)):
-                            with open (os.path.join(conf,link.text,link.text+'_'+version), 'w') as file:
-                                for line in lines:
-                                    file.write(line+'\n')
-                            print('\n' + 'new version found for ' + link.text + ': ' + version)
-
+	size_limit = 2
+	sys.argv = sys.argv[1:]
+	parser = argparse.ArgumentParser(
+		prog = 'Patch gatherer',
+		description = 'Fetch the current patches from intranet, keeping history of versions')
+	parser.add_argument('conf', nargs='?', default='710SP1', help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
+	args = parser.parse_args(argv)
+	conf = args.conf
+	target_url = 'https://kiwi.planisware.com/Intranet/versions/' + conf + '/patches/_en_dev/'
+	print('Download from ' + target_url)
+	response, session = fetchTargetPageWithSamlNego(target_url)
+	if response == False:
+		print('Login failed. exit')
+		return False
+	if not os.path.isdir(conf):
+		os.mkdir(conf)
+	if response.status_code != 200:
+		print('Unable to open ' + target_url + 'Status: ' + response.status_code)
+	else:
+		soup = BeautifulSoup(response.text, 'html.parser')
+		links = [link for link in soup.find_all('a', href=True) if link['href'].endswith('.obin')]
+		i=0
+		for link in links:
+			i+=1
+			print(str(i)+'/'+str(len(links)) + '    ',end = '\r')
+			if not os.path.isdir(os.path.join(conf,link.text)):
+				os.makedirs(os.path.join(conf,link.text))
+			if os.path.isdir(os.path.join(conf,link.text)):
+				url = target_url + link['href']
+				size = int(session.head(url).headers['Content-Length'])
+				if size < size_limit * 1024 * 1024 or not processExclusion(link.text, conf, size_limit):
+					text = session.get(url).text
+					lines = text.splitlines()
+					firstline = lines[0]
+					match = re.search(r'v (\d+\.\d+)',firstline)
+					if match:
+						version = match.group(1)
+						if not os.path.isfile(os.path.join(conf,link.text,link.text+'_'+version)):
+							with open (os.path.join(conf,link.text,link.text+'_'+version), 'w') as file:
+								for line in lines:
+									file.write(line+'\n')
+							print('\n' + 'new version found for ' + link.text + ': ' + version)
+	for path, directories, files in os.walk(conf):
+		with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
+			for file in files:
+				fout.writeln(file)
+				print(file)
+		  
 default_conf = '710SP1'
 if __name__ == '__main__':
     main()
