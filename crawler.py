@@ -112,11 +112,11 @@ def main(argv=sys.argv[1:]):
 								for line in lines:
 									file.write(line+'\n')
 							print('\n' + 'new version found for ' + link.text + ': ' + version)
-	for path, directories, files in os.walk(conf):
-		with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
-			for file in files:
-				fout.write(file+'\n')
-				print(file)
+	
+    with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
+        for path, directories, files in os.walk(conf):
+			fout.write(file+'\n')
+			print(file)
 
 default_conf = '710SP1'
 if __name__ == '__main__':
