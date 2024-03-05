@@ -53,20 +53,21 @@ def fetchTargetPageWithSamlNego(target_url):
     return response_target, session
 
 def processExclusion(filename, conf, size_limit):
-    if os.path.isfile(os.path.join(conf,'exclusions.txt')):
-        with open(os.path.join(conf,'exclusions.txt')) as file:
-            for line in file:
-                if filename == line:
-                    return True
-    sExclude = input('\nThe file ' + filename + ' exceeds ' + str(size_limit) + 'Mb. Add it to exclusions? (y/n):')
-    while not sExclude.lower() in ['yes', 'y', 'no', 'n', 'oui', 'o']:
-        sExclude = input("Invalid answer. Please enter 'yes', 'y', 'no' or 'n'")
-    if sExclude.lower() in ['yes', 'y', 'oui', 'o']:
-        with open(os.path.join(conf,'exclusions.txt'), 'a') as file:
-            file.write(filename+'\n')
-        return True
-    else:
-        return False
+	if os.path.isfile(os.path.join(conf,'exclusions.txt')):
+		with open(os.path.join(conf,'exclusions.txt')) as file:
+			for line in file:
+				if filename in line:
+					print(filename + ' ignored (mentionned in exclusions.txt)')
+					return True
+	sExclude = input('\nThe file ' + filename + ' exceeds ' + str(size_limit) + 'Mb. Add it to exclusions? (y/n):')
+	while not sExclude.lower() in ['yes', 'y', 'no', 'n', 'oui', 'o']:
+		sExclude = input("Invalid answer. Please enter 'yes', 'y', 'no' or 'n'")
+	if sExclude.lower() in ['yes', 'y', 'oui', 'o']:
+		with open(os.path.join(conf,'exclusions.txt'), 'a') as file:
+			file.write(filename+'\n')
+		return True
+	else:
+		return False
 
 def main(argv=sys.argv[1:]):
     size_limit = 2
