@@ -111,7 +111,7 @@ def main(argv=sys.argv[1:]):
 							with open (os.path.join(conf,link.text,link.text+'_'+version), 'w') as file:
 								for line in lines:
 									file.write(line+'\n')
-							print('\n' + 'new version found for ' + link.text + ': ' + version)
+							print('\n' + 'new version: ' + link.text + ' ' + version)
 	patchlist = []
 	for path, directories, files in os.walk(conf):
 		for file in files:
