@@ -1,4 +1,4 @@
 .DS_Store
+*.bak
 710SP1/
-crawler.py.bak
-.gitignore.bak
+700SP0/
