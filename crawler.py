@@ -107,7 +107,10 @@ def main(argv=sys.argv[1:]):
 					text = session.get(url).text
 					lines = text.splitlines()
 					firstline = lines[0]
-					documentation = lines[2]
+					documentation = ''
+					for eachLine in lines[:5]:
+						if eachLine.startswith('DOCUMENTATION:'):
+							documentation = eachLine
 					match = re.search(r'v (\d+\.\d+)',firstline)
 					if match:
 						version = match.group(1)
@@ -116,6 +119,7 @@ def main(argv=sys.argv[1:]):
 								for line in lines:
 									file.write(line+'\n')
 							print('\n' + 'new version: ' + link.text + ' ' + version + ' ' + documentation)
+	
 	patchlist = []
 	for path, directories, files in os.walk(conf):
 		for file in files:
@@ -130,6 +134,7 @@ def main(argv=sys.argv[1:]):
 	patchlist.sort()
 	with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
 		fout.write(''.join(patchlist))
+	input('Type any key to exit.')
 
 default_conf = '710SP1'
 if __name__ == '__main__':
