@@ -134,7 +134,7 @@ def main(argv=sys.argv[1:]):
 	patchlist.sort()
 	with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
 		fout.write(''.join(patchlist))
-	input('Type any key to exit.')
+	input('Type Enter to exit.')
 
 default_conf = '710SP1'
 if __name__ == '__main__':
