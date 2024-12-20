@@ -76,8 +76,9 @@ def main(argv=sys.argv[1:]):
 	sys.argv = sys.argv[1:]
 	parser = argparse.ArgumentParser(
 		prog = 'Patch gatherer',
-		description = 'Fetch the current patches from intranet, keeping history of versions')
-	parser.add_argument('conf', nargs='?', default='710SP1', help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
+		description = 'Fetch the current patches from intranet, keeping history of versions
+		test')
+	parser.add_argument('conf', nargs='?', default=default_conf, help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
 	parser.add_argument('-a', '--all',  action='store_true', default=False, help='Bypass ignore list to download all patches')
 	args = parser.parse_args(argv)
 	conf = args.conf
@@ -132,9 +133,12 @@ def main(argv=sys.argv[1:]):
 							documentation = eachLine
 					patchlist.append(file+'\t'+documentation)
 	patchlist.sort()
-	with open(os.path.join(conf,'patch_list.txt'),'w') as fout:
+	with open(os.path.join(conf,'patch_list_'+conf+'.txt'),'w') as fout:
 		fout.write(''.join(patchlist))
-	input('Type Enter to exit.')
+	sOpen = input('Do you want to open the patch listing? ')
+	if sOpen.lower() in ['yes', 'y', 'oui', 'o']:
+		os.startfile(os.path.join(conf,'patch_list_'+conf+'.txt'))
+
 
 default_conf = '710SP1'
 if __name__ == '__main__':
