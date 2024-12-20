@@ -76,8 +76,7 @@ def main(argv=sys.argv[1:]):
 	sys.argv = sys.argv[1:]
 	parser = argparse.ArgumentParser(
 		prog = 'Patch gatherer',
-		description = 'Fetch the current patches from intranet, keeping history of versions
-		test')
+		description = 'Fetch the current patches from intranet, keeping history of versions')
 	parser.add_argument('conf', nargs='?', default=default_conf, help='710SP1 (default), 700SP0, 630SP3, 620SP2, 610SP1, 600SP0,520SP2')
 	parser.add_argument('-a', '--all',  action='store_true', default=False, help='Bypass ignore list to download all patches')
 	args = parser.parse_args(argv)
