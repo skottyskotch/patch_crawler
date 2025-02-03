@@ -61,7 +61,7 @@ def processExclusion(filename, conf, size, size_limit, all):
 					if all:
 						print('--all requested. Ignore list bypassed')
 					return True
-	sExclude = input('\nThe file ' + filename + ' exceeds ' + str(size_limit) + 'Mb. Add it to exclusions? (y/n):')
+	sExclude = input('\nThe file ' + filename + ' exceeds ' + str(size_limit) + 'Mb (' + str(size) + '). Add it to exclusions? (y/n):')
 	while not sExclude.lower() in ['yes', 'y', 'no', 'n', 'oui', 'o']:
 		sExclude = input("Invalid answer. Please enter 'yes', 'y', 'no' or 'n'")
 	if sExclude.lower() in ['yes', 'y', 'oui', 'o']:
