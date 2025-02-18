@@ -1,7 +1,7 @@
 import requests
 import time
 import getpass
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup # pip install bs4
 import os
 import re
 import sys
