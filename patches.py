@@ -1,4 +1,4 @@
-import requests
+import requests # pip install requests
 import time
 import getpass
 from bs4 import BeautifulSoup # pip install bs4
@@ -137,7 +137,6 @@ def main(argv=sys.argv[1:]):
 	sOpen = input('Do you want to open the patch listing? ')
 	if sOpen.lower() in ['yes', 'y', 'oui', 'o']:
 		os.startfile(os.path.join(conf,'patch_list_'+conf+'.txt'))
-
 
 default_conf = '710SP1'
 if __name__ == '__main__':
